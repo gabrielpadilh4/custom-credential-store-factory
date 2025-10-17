@@ -15,6 +15,9 @@ import org.wildfly.security.password.Password;
 import org.wildfly.security.password.interfaces.ClearPassword;
 
 public class CustomCredentialStore extends CredentialStoreSpi {
+	
+	private static String DB_PASSWORD_ALIAS = "DB_PASSWORD_ALIAS";
+	private static String MY_CLEAR_DB_PASSWORD = "mydbpassword";
 
     Map<String, Credential> credentials = new HashMap<>();
 
@@ -22,11 +25,10 @@ public class CustomCredentialStore extends CredentialStoreSpi {
     public void initialize(Map<String, String> attributes, CredentialStore.ProtectionParameter protectionParameter,
             Provider[] providers)
             throws CredentialStoreException {
-
-        
-        // Adding the "mydbpassword" credential to the alias "DB_PASSWORD_ALIAS"
-        credentials.put("DB_PASSWORD_ALIAS",
-                new PasswordCredential((Password) ClearPassword.createRaw("clear", "mydbpassword".toCharArray())));
+    	// Initialize the credentials
+        credentials.put(DB_PASSWORD_ALIAS,
+                new PasswordCredential((Password) ClearPassword.createRaw("clear", MY_CLEAR_DB_PASSWORD.toCharArray())));
+        this.initialized = true;
     }
 
     @Override
